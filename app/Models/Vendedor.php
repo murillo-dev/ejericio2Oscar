@@ -11,7 +11,6 @@ class Vendedor extends Model
         'nombre',
         'email',
         'telefono',
-        'tipo',
         'zona_id',
         'supervisor_id',
         'activo'
@@ -34,10 +33,5 @@ class Vendedor extends Model
     public function scopeActivos($query)
     {
         return $query->where('activo', true);
-    }
-
-    public function scopeByTipo($query, $tipo)
-    {
-        return $query->where('tipo', $tipo);
     }
 }
