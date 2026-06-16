@@ -20,23 +20,31 @@ class DatabaseSeeder extends Seeder
 
         // Crear Zonas
         $this->command->line('Creando zonas...');
-        $zonas = Zona::createMany([
+        $zonasData = [
             ['nombre' => 'Centro', 'descripcion' => 'Zona Centro de la ciudad', 'codigo' => 'CTR'],
             ['nombre' => 'Norte', 'descripcion' => 'Zona Norte de la ciudad', 'codigo' => 'NRT'],
             ['nombre' => 'Sur', 'descripcion' => 'Zona Sur de la ciudad', 'codigo' => 'SUR'],
             ['nombre' => 'Este', 'descripcion' => 'Zona Este de la ciudad', 'codigo' => 'EST'],
             ['nombre' => 'Oeste', 'descripcion' => 'Zona Oeste de la ciudad', 'codigo' => 'OES'],
-        ]);
+        ];
+        $zonas = [];
+        foreach ($zonasData as $data) {
+            $zonas[] = Zona::create($data);
+        }
 
         // Crear Supervisores
         $this->command->line('Creando supervisores...');
-        $supervisores = Supervisor::createMany([
+        $supervisoresData = [
             ['nombre' => 'Carlos López', 'email' => 'carlos.lopez@empresa.com', 'telefono' => '1234567890', 'activo' => true],
             ['nombre' => 'María García', 'email' => 'maria.garcia@empresa.com', 'telefono' => '1234567891', 'activo' => true],
             ['nombre' => 'Juan Rodríguez', 'email' => 'juan.rodriguez@empresa.com', 'telefono' => '1234567892', 'activo' => true],
             ['nombre' => 'Ana Martínez', 'email' => 'ana.martinez@empresa.com', 'telefono' => '1234567893', 'activo' => true],
             ['nombre' => 'Luis Fernández', 'email' => 'luis.fernandez@empresa.com', 'telefono' => '1234567894', 'activo' => true],
-        ]);
+        ];
+        $supervisores = [];
+        foreach ($supervisoresData as $data) {
+            $supervisores[] = Supervisor::create($data);
+        }
 
         // Crear Vendedores
         $this->command->line('Creando vendedores...');
@@ -54,13 +62,17 @@ class DatabaseSeeder extends Seeder
 
         // Crear Titulares
         $this->command->line('Creando titulares...');
-        $titulares = Titular::createMany([
+        $titularesData = [
             ['nombre' => 'Pedro González', 'email' => 'pedro.gonzalez@tiendas.com', 'telefono' => '9876543210', 'documento' => '12345678A', 'activo' => true],
             ['nombre' => 'Rosa Sánchez', 'email' => 'rosa.sanchez@tiendas.com', 'telefono' => '9876543211', 'documento' => '12345678B', 'activo' => true],
             ['nombre' => 'Miguel Pérez', 'email' => 'miguel.perez@tiendas.com', 'telefono' => '9876543212', 'documento' => '12345678C', 'activo' => true],
             ['nombre' => 'Luisa Jiménez', 'email' => 'luisa.jimenez@tiendas.com', 'telefono' => '9876543213', 'documento' => '12345678D', 'activo' => true],
             ['nombre' => 'Fernando Ruiz', 'email' => 'fernando.ruiz@tiendas.com', 'telefono' => '9876543214', 'documento' => '12345678E', 'activo' => true],
-        ]);
+        ];
+        $titulares = [];
+        foreach ($titularesData as $data) {
+            $titulares[] = Titular::create($data);
+        }
 
         // Crear Tiendas
         $this->command->line('Creando tiendas...');
