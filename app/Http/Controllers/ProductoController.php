@@ -12,8 +12,7 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
-        $productos = Producto::all();
+        $productos = Producto::paginate(15);
         return response()->json($productos);
     }
 
@@ -22,8 +21,15 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $producto = Producto::create($request->all());
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255|unique:productos',
+            'descripcion' => 'nullable|string',
+            'precio' => 'required|numeric|min:0.01',
+            'stock' => 'required|integer|min:0',
+            'sku' => 'nullable|string|unique:productos'
+        ]);
+
+        $producto = Producto::create($validated);
         return response()->json($producto, 201);
     }
 
@@ -32,7 +38,6 @@ class ProductoController extends Controller
      */
     public function show(string $id)
     {
-        //
         $producto = Producto::findOrFail($id);
         return response()->json($producto);
     }
@@ -42,9 +47,17 @@ class ProductoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $producto = Producto::findOrFail($id);
-        $producto->update($request->all());
+
+        $validated = $request->validate([
+            'nombre' => 'sometimes|string|max:255|unique:productos,nombre,' . $id,
+            'descripcion' => 'nullable|string',
+            'precio' => 'sometimes|numeric|min:0.01',
+            'stock' => 'sometimes|integer|min:0',
+            'sku' => 'nullable|string|unique:productos,sku,' . $id
+        ]);
+
+        $producto->update($validated);
         return response()->json($producto);
     }
 
@@ -53,9 +66,17 @@ class ProductoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
         $producto = Producto::findOrFail($id);
         $producto->delete();
         return response()->json(null, 204);
+    }
+
+    /**
+     * Get products in stock.
+     */
+    public function enStock()
+    {
+        $productos = Producto::enStock()->paginate(15);
+        return response()->json($productos);
     }
 }

@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Supervisor;
+use App\Models\Titular;
 
-class SupervisorController extends Controller
+class TitularController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $supervisores = Supervisor::with('vendedores')->paginate(15);
-        return response()->json($supervisores);
+        $titulares = Titular::with('tiendas')->paginate(15);
+        return response()->json($titulares);
     }
 
     /**
@@ -23,13 +23,14 @@ class SupervisorController extends Controller
     {
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
-            'email' => 'required|email|unique:supervisores',
+            'email' => 'required|email|unique:titulares',
             'telefono' => 'nullable|string|max:20',
+            'documento' => 'nullable|string|unique:titulares',
             'activo' => 'boolean'
         ]);
 
-        $supervisor = Supervisor::create($validated);
-        return response()->json($supervisor, 201);
+        $titular = Titular::create($validated);
+        return response()->json($titular, 201);
     }
 
     /**
@@ -37,8 +38,8 @@ class SupervisorController extends Controller
      */
     public function show(string $id)
     {
-        $supervisor = Supervisor::with('vendedores')->findOrFail($id);
-        return response()->json($supervisor);
+        $titular = Titular::with('tiendas')->findOrFail($id);
+        return response()->json($titular);
     }
 
     /**
@@ -46,17 +47,18 @@ class SupervisorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $supervisor = Supervisor::findOrFail($id);
+        $titular = Titular::findOrFail($id);
 
         $validated = $request->validate([
             'nombre' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:supervisores,email,' . $id,
+            'email' => 'sometimes|email|unique:titulares,email,' . $id,
             'telefono' => 'nullable|string|max:20',
+            'documento' => 'nullable|string|unique:titulares,documento,' . $id,
             'activo' => 'boolean'
         ]);
 
-        $supervisor->update($validated);
-        return response()->json($supervisor);
+        $titular->update($validated);
+        return response()->json($titular);
     }
 
     /**
@@ -64,17 +66,17 @@ class SupervisorController extends Controller
      */
     public function destroy(string $id)
     {
-        $supervisor = Supervisor::findOrFail($id);
-        $supervisor->delete();
+        $titular = Titular::findOrFail($id);
+        $titular->delete();
         return response()->json(null, 204);
     }
 
     /**
-     * Get active supervisors.
+     * Get active proprietors.
      */
     public function activos()
     {
-        $supervisores = Supervisor::activos()->with('vendedores')->paginate(15);
-        return response()->json($supervisores);
+        $titulares = Titular::activos()->with('tiendas')->paginate(15);
+        return response()->json($titulares);
     }
 }
