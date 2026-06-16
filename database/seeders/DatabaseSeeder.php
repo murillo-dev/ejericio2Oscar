@@ -53,7 +53,6 @@ class DatabaseSeeder extends Seeder
                 'nombre' => "Vendedor $i",
                 'email' => "vendedor$i@empresa.com",
                 'telefono' => '123456789' . $i,
-                'tipo' => $i % 2 === 0 ? 'directo' : 'indirecto',
                 'zona_id' => $zonas[($i - 1) % 5]->id,
                 'supervisor_id' => $supervisores[($i - 1) % 5]->id,
                 'activo' => true
