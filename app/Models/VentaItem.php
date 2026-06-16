@@ -6,5 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class VentaItem extends Model
 {
-    //
+    protected $table = 'ventas_items';
+    protected $fillable = [
+        'venta_id',
+        'producto_id',
+        'cantidad',
+        'precio_unitario',
+        'subtotal'
+    ];
+
+    public function venta()
+    {
+        return $this->belongsTo(Venta::class);
+    }
+
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
+    }
 }

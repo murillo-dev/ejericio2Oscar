@@ -12,8 +12,7 @@ class ZonaController extends Controller
      */
     public function index()
     {
-        //
-        $zonas = Zona::all();
+        $zonas = Zona::with(['tiendas', 'vendedores'])->paginate(15);
         return response()->json($zonas);
     }
 
@@ -22,8 +21,13 @@ class ZonaController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $zona = Zona::create($request->all());
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255|unique:zonas',
+            'descripcion' => 'nullable|string',
+            'codigo' => 'nullable|string|unique:zonas'
+        ]);
+
+        $zona = Zona::create($validated);
         return response()->json($zona, 201);
     }
 
@@ -32,8 +36,7 @@ class ZonaController extends Controller
      */
     public function show(string $id)
     {
-        //
-        $zona = Zona::findOrFail($id);
+        $zona = Zona::with(['tiendas', 'vendedores'])->findOrFail($id);
         return response()->json($zona);
     }
 
@@ -42,9 +45,15 @@ class ZonaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $zona = Zona::findOrFail($id);
-        $zona->update($request->all());
+
+        $validated = $request->validate([
+            'nombre' => 'sometimes|string|max:255|unique:zonas,nombre,' . $id,
+            'descripcion' => 'nullable|string',
+            'codigo' => 'nullable|string|unique:zonas,codigo,' . $id
+        ]);
+
+        $zona->update($validated);
         return response()->json($zona);
     }
 
@@ -53,7 +62,6 @@ class ZonaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
         $zona = Zona::findOrFail($id);
         $zona->delete();
         return response()->json(null, 204);

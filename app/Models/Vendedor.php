@@ -6,11 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vendedor extends Model
 {
-    //
     protected $table = 'vendedores';
     protected $fillable = [
         'nombre',
-        'tipo'
+        'email',
+        'telefono',
+        'tipo',
+        'zona_id',
+        'supervisor_id',
+        'activo'
+    ];
+
+    protected $casts = [
+        'activo' => 'boolean'
     ];
 
     public function zona()
@@ -21,5 +29,15 @@ class Vendedor extends Model
     public function supervisor()
     {
         return $this->belongsTo(Supervisor::class);
+    }
+
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
+    }
+
+    public function scopeByTipo($query, $tipo)
+    {
+        return $query->where('tipo', $tipo);
     }
 }
